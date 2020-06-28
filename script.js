@@ -48,7 +48,6 @@ for (var i = 0; i < operator.length; i++) {
         } else {
             var output = getOutput();
             var history = getHistory();
-            console.log(output + "\n" + history);
             if (output == "" && history != "") {
                 if (isNaN(history[history.length - 1])) {
                     history = history.substr(0, history.length - 1);
@@ -61,8 +60,16 @@ for (var i = 0; i < operator.length; i++) {
                 history = history + output;
                 if (this.id == "=") {
                     var result = eval(history);
-                    printOutput(result);
-                    printHistory("");
+                    if (result.toString().length <= 15) {
+                        printOutput(result);
+                        printHistory("");
+                    } else if (result.toString().length > 15) {
+                        alert("can't calculate Number too big.")
+                        printOutput("");
+                        printHistory("");
+                    } else if (history == "") {
+                        printOutput(output)
+                    }
                 } else {
                     history = history + this.id;
                     printHistory(history);
@@ -78,7 +85,7 @@ var number = document.getElementsByClassName("number");
 for (var i = 0; i < number.length; i++) {
     number[i].addEventListener('click', function () {
         var output = reverseNumberFormat(getOutput())
-        if (output != NaN) {
+        if (output != NaN && output.toString().length < 15) {
             output = output + this.id;
             printOutput(output)
         }
